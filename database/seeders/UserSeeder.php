@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password'),
             'is_admin' => true,
         ]);
-        $user1->createToken('API Token')->accessToken;
+        // $user1->createToken('API Token')->accessToken;
 
         $user2 = User::factory()->create([
             'email'    => 'user1@test.com',
@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
             'name'     => 'User 1',
             'is_admin' => false,
         ]);
-        $user2->createToken('API Token')->accessToken;
+        // $user2->createToken('API Token')->accessToken;
 
         $user3 = User::factory()->create([
             'email'    => 'user2@test.com',
@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
             'name'     => 'User 2',
             'is_admin' => false,
         ]);
-        $user3->createToken('API Token')->accessToken;
+        // $user3->createToken('API Token')->accessToken;
 
         $user4 = User::factory()->create([
             'email'    => 'user3@test.com',
@@ -40,6 +40,6 @@ class UserSeeder extends Seeder
             'name'     => 'User 3',
             'is_admin' => false,
         ]);
-        $user4->createToken('API Token')->accessToken;
+        // $user4->createToken('API Token')->accessToken;
     }
 }
