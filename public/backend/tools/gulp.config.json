@@ -1,0 +1,23 @@
+{
+  "config": {
+    "path": {
+      "src": "../{demo}/src"
+    },
+    "dist": [
+      "../{demo}/dist/assets"
+    ]
+  },
+  "compile": {
+    "rtl": {
+        "enabled": false,
+        "skip": [
+            "select2",
+            "line-awesome",
+            "fontawesome5",
+            "nouislider",
+            "tinymce",
+            "sweetalert2"
+        ]
+    }
+}
+}

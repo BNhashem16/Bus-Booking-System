@@ -1,0 +1,45 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+li,
+span,
+td,
+a,
+button,
+th {
+    font-family: 'Noto Sans Arabic', sans-serif !important;
+    /* font-family: 'Cairo', sans-serif !important; */
+    font-size: 14px !important;
+}
+
+input:-moz-placeholder {
+    text-align: right;
+}
+
+input:-ms-input-placeholder {
+    text-align: right;
+}
+
+input::-webkit-input-placeholder {
+    text-align: right;
+}
+
+span > .select2-dropdown {
+    position: sticky !important;
+}
+
+.card-box {
+    text-align: left;
+}
+
+
+.lang-dropdown {
+    float: left;
+    margin-top: 30px;
+    margin-left: 30px;
+    border-radius: 50px;
+}
