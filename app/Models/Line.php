@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Line extends Model
+class Line extends BaseModel
 {
     use HasFactory;
 
@@ -22,6 +22,16 @@ class Line extends Model
 
     public function scopeStartToEnd($query): Builder
     {
-        return $query->line()->orderBy('line_id', 'ASC')->orderBy('order', 'ASC');
+        return $query->orderBy('line_id', 'ASC')->orderBy('order', 'ASC');
+    }
+
+    public function lines(): HasMany
+    {
+        return $this->hasMany(self::class)->StartToEnd();
+    }
+
+    public function getAllLintPointWithoutStopLine($parentLine): Builder
+    {
+        return self::StartToEnd()->Line()->where('line_id', $parentLine)->where('id', '<>', $this->id)->where('order', '>', $this->order);
     }
 }
