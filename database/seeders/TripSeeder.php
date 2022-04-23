@@ -15,14 +15,17 @@ class TripSeeder extends Seeder
      */
     public function run()
     {
+        // First Line
         $firstLine = Line::find(1);
+
+        // Points of First Line!
         $firstLineStations = $firstLine->lines()->get();
 
         foreach ($firstLineStations as $key => $firstLineStation) {
-            // \dd($firstLineStation);
             $nextStations = $firstLineStation->getAllLintPointWithoutStopLine($firstLineStation->line_id)->get();
             foreach ($nextStations as $key => $nextStation) {
                 Trip::create([
+                    'line_id' => $firstLineStation->line_id,
                     'start_point' => $firstLineStation->station_id,
                     'end_point'   => $nextStation->station_id,
                 ]);
