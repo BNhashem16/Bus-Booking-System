@@ -18,9 +18,6 @@ class StoreReservationRequest extends FormRequest
 
     public function rules(): array
     {
-        // \dd($this->trip_id);
-        // $trip = Reservation::where('trip_id', $this->trip_id)
-
         return [
             'trip_id' => [
                 'required',

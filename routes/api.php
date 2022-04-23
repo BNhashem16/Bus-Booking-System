@@ -9,15 +9,11 @@ use Illuminate\Support\Facades\Route;
 // Authentication
 Route::post('login', LoginController::class);
 
-    Route::middleware('auth:api')->group(function () {
+Route::middleware('auth:api')->group(function () {
 
-        // -------------------- reservations --------------------------------
-        Route::post('reservations/store', [ReservationController::class, 'store']);
+    // -------------------- reservations --------------------------------
+    Route::post('reservations/store', [ReservationController::class, 'store']);
 
-        // -------------------- trips --------------------------------
-        Route::get('trips', [TripController::class, 'index']);
-
-        // Route::post('test', function () {
-        //     dd(Auth::user());
-        // });
-    });
+    // -------------------- trips --------------------------------
+    Route::get('trips', [TripController::class, 'index']);
+});

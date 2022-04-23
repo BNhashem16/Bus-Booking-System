@@ -21,49 +21,57 @@ class CheckMaximumCapacityRule implements Rule
      * @param  mixed  $value
      * @return
      */
+
+    // ! TODO --> some optimization should be here
     public function passes($attribute, $tripId)
     {
+        // Errors container
         $returnValue = [];
-        $trip = Trip::find($tripId); // 5
-        $startPoint = $trip->start_point; // 181 --> Fayoum
-        $endPoint = $trip->end_point; // 266 --> Assuit
 
-        $orderStartPoint = Line::where('station_id', $startPoint)->value('order'); // 2
-        $orderEndPoint = Line::where('station_id', $endPoint)->value('order'); // 4
+        // Trip that user want to reserve
+        $trip = Trip::find($tripId);
+        $startPoint = $trip->start_point;
+        $endPoint = $trip->end_point;
 
-        $line = Line::find(1);
-        $points = $line->lines()->get();
+        // order of start point on trip line
+        $orderStartPoint = Line::where('station_id', $startPoint)->value('order');
 
+        // order of end point on trip line
+        $orderEndPoint = Line::where('station_id', $endPoint)->value('order');
+
+        // Test case 1: if user reserve such as all reservations
+        // Ex: Reserve cairo - El Minya --> 12 times
+        $countOfSameTrip = Reservation::where('line_id', $trip->line_id)->where('trip_id', $trip->id)->count();
+        array_push($returnValue, $countOfSameTrip < Trip::MAXIMUM_CAPACITY);
+        // ---------------------------------------------------------------------------------
+        // counter variable to check status
+        $checkForMiddlePoint = 0;
         $checkPointsBeforeReservationCheckTrue = 0;
         $checkPointsBeforeReservationCheckFalse = 0;
-        $reservations = Reservation::where('line_id', $line->id)->get();
+        // ----------------------------------------------------------------------------------
+        // All Reservation in same line that user want to reserve a trip
+        $reservations = Reservation::where('line_id', $trip->line_id)->get();
         foreach ($reservations as $key => $reservation) {
-            $orderOfReservationStartPoint = Line::where('station_id', $reservation->start_point)->first(); // 1
-            $orderOfReservationEndPoint = Line::where('station_id', $reservation->end_point)->first(); // 3
+            $orderOfReservationStartPoint = Line::where('station_id', $reservation->start_point)->first();
+            $orderOfReservationEndPoint = Line::where('station_id', $reservation->end_point)->first();
 
-            /*
-             * First check
-             * if past reservation end point sort smaller than future reservation end point
-             * * pass this case
-             */
+            // Test Case 2: if user want to reserve point between Two points and bus completed
+            // Ex: Reserve cairo - El Minya --> 11 times & Al fayuom - Assuit --> 1 time
+
+            $startPointOrderSmallerNewReservation = $orderOfReservationStartPoint->order <= $orderEndPoint;
+            $endPointOrderSmallerNewReservation = $orderEndPoint <= $orderOfReservationEndPoint->order;
+            if ($startPointOrderSmallerNewReservation && $endPointOrderSmallerNewReservation) {
+                $checkForMiddlePoint += 1;
+            }
+
             if ($orderOfReservationEndPoint->order < $orderEndPoint) {
                 $checkPointsBeforeReservationCheckTrue += 1;
             } else {
                 $checkPointsBeforeReservationCheckFalse += 1;
             }
         }
-
-        /*
-         * Second check if cases in check points before reservation return numbers
-         */
-        array_push($returnValue, $checkPointsBeforeReservationCheckTrue >= $checkPointsBeforeReservationCheckFalse);
-
-        array_push($returnValue, $checkPointsBeforeReservationCheckFalse < Trip::MAXIMUM_CAPACITY);
-        // \dd($returnValue);
-        \dd($checkPointsBeforeReservationCheckTrue, $checkPointsBeforeReservationCheckFalse);
-        // \dd(! in_array(false, $returnValue));
-
-        // $firstCheck = Trip::MAXIMUM_CAPACITY - $numberOfPassengersOnTrip; // true if 4 > 3
+        // ----------------------------------------------------------------------------------
+        array_push($returnValue, Trip::MAXIMUM_CAPACITY > $checkForMiddlePoint);
 
         return ! in_array(false, $returnValue);
     }

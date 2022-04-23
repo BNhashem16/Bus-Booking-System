@@ -37,9 +37,13 @@ Install my-project with composer
   composer update
   php artisan key generate
   php artisan migrate:fresh --seed
+  php artisan passport:install
   php artisan serve
 ```
-    
+
+## Database Diagram
+https://drawsql.app/matrix/diagrams/task
+  
 
 ## Links
 ### API Links
