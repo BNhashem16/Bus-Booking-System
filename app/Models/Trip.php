@@ -9,7 +9,7 @@ class Trip extends BaseModel
 {
     use HasFactory;
 
-    public const MAXIMUM_CAPACITY = 4;
+    public const MAXIMUM_CAPACITY = 12;
 
     public function startPoint(): BelongsTo
     {
